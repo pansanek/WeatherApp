@@ -1,4 +1,4 @@
-package ru.potemkin.weatherapp.ui.theme
+package ru.potemkin.weatherapp.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
