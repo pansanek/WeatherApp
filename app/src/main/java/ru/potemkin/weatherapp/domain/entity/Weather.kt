@@ -1,6 +1,6 @@
 package ru.potemkin.weatherapp.domain.entity
 
-import android.icu.util.Calendar
+import java.util.Calendar
 
 data class Weather(
     val tempC:Float,
