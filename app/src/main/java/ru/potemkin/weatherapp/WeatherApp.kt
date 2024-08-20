@@ -4,7 +4,7 @@ import android.app.Application
 import ru.potemkin.weatherapp.di.ApplicationComponent
 import ru.potemkin.weatherapp.di.DaggerApplicationComponent
 
-class WeaterApp:Application() {
+class WeatherApp:Application() {
 
     lateinit var applicationComponent: ApplicationComponent
 
