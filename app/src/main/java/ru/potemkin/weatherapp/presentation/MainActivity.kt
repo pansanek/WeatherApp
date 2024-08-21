@@ -11,6 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.potemkin.weatherapp.WeatherApp
 import ru.potemkin.weatherapp.data.network.api.ApiFactory
+import ru.potemkin.weatherapp.domain.usecase.ChangeFavouriteStateUseCase
+import ru.potemkin.weatherapp.domain.usecase.SearchCityUseCase
 import ru.potemkin.weatherapp.presentation.root.RootComponentImpl
 import ru.potemkin.weatherapp.presentation.root.RootContent
 import ru.potemkin.weatherapp.presentation.ui.theme.WeatherAppTheme
@@ -20,10 +22,16 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var rootComponentFactory: RootComponentImpl.Factory
 
+    @Inject
+    lateinit var searchSearchCityUseCase: SearchCityUseCase
+
+    @Inject
+    lateinit var changeFavouriteStateUseCase: ChangeFavouriteStateUseCase
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as WeatherApp).applicationComponent.inject(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             RootContent(component =rootComponentFactory.create(defaultComponentContext()) )
         }
