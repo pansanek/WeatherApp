@@ -35,6 +35,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.potemkin.weatherapp.R
+import ru.potemkin.weatherapp.domain.entity.City
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +51,7 @@ fun SearchContent(component: SearchComponent) {
     }
     SearchBar(
         modifier = Modifier.focusRequester(focusRequester),
-        placeholder = { Text(text = stringResource(R.string.search))},
+        placeholder = { Text(text = stringResource(R.string.search)) },
         query = state.searchQuery,
         onQueryChange = { component.changeSearchQuery(it) },
         onSearch = { component.onClickSearch() },
@@ -75,20 +76,81 @@ fun SearchContent(component: SearchComponent) {
     ) {
         when (val searchState = state.searchState) {
             SearchStore.State.SearchState.EmptyResult -> {
-
+                Text(
+                    text = stringResource(R.string.empty_result_text),
+                    modifier = Modifier.padding(8.dp)
+                )
             }
+
             SearchStore.State.SearchState.Error -> {
-
+                Text(
+                    text = stringResource(R.string.something_went_wrong),
+                    modifier = Modifier.padding(8.dp)
+                )
             }
+
             SearchStore.State.SearchState.Initial -> {
 
             }
+
             SearchStore.State.SearchState.Loading -> {
-
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
             }
+
             is SearchStore.State.SearchState.SuccessLoaded -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    items(
+                        items = searchState.cities,
+                        key = { it.id }
+                    ) {
+                        CityCard(
+                            city = it,
+                            onCityClick = {
+                                component.onClickCity(it)
+                            }
+                        )
+                    }
+                }
 
             }
+        }
+    }
+}
+
+@Composable
+private fun CityCard(
+    city: City,
+    onCityClick: (City) -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onCityClick(city) }
+                .padding(
+                    vertical = 8.dp,
+                    horizontal = 16.dp
+                )
+        ) {
+            Text(
+                text = city.name,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = city.country)
         }
     }
 }
