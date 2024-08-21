@@ -5,31 +5,27 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.arkivanov.decompose.defaultComponentContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.potemkin.weatherapp.WeatherApp
 import ru.potemkin.weatherapp.data.network.api.ApiFactory
+import ru.potemkin.weatherapp.presentation.root.RootComponentImpl
+import ru.potemkin.weatherapp.presentation.root.RootContent
 import ru.potemkin.weatherapp.presentation.ui.theme.WeatherAppTheme
+import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var rootComponentFactory: RootComponentImpl.Factory
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        (applicationContext as WeatherApp).applicationComponent.inject(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val apiService = ApiFactory.apiService
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val currentWeather = apiService.loadCurrentWeather("London")
-            val forecast = apiService.loadForecast("London")
-            val cities = apiService.searchCity("London")
-            Log.d(
-                "MainActivity",
-                "Current Weather: $currentWeather\nForecase Weather: $forecast\nCities:$cities"
-            )
-        }
         setContent {
-            WeatherAppTheme {
-
-            }
+            RootContent(component =rootComponentFactory.create(defaultComponentContext()) )
         }
     }
 }
