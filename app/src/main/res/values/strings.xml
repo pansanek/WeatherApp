@@ -2,5 +2,6 @@
     <string name="app_name">WeatherApp</string>
     <string name="button_add_favourite">Add favourite</string>
     <string name="search">Search</string>
-    <string name="upcoming">Upcoming</string>
+    <string name="upcoming">Прогноз</string>
+
 </resources>
